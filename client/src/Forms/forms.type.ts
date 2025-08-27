@@ -7,9 +7,10 @@ export type RegisterType = {
   username: string;
   password: string;
   passwordRepeat: string;
-  firsName: string;
+  firstName: string;
   lastName: string;
   email: string;
+  phone: string;
 };
 
 export type RegisterFormFormProps = {

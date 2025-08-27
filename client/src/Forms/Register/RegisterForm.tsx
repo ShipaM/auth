@@ -1,12 +1,25 @@
 import { Form, Input, Flex, Button, type FormProps } from "antd";
 import { memo, type FC } from "react";
 import type { RegisterType } from "../forms.type";
+import axios from "axios";
+
+const http = axios.create({
+  baseURL: "http://localhost:5000/api/",
+  params: {},
+  withCredentials: true,
+});
 
 const RegisterForm: FC = () => {
-  const handleFinishRegister: FormProps<RegisterType>["onFinish"] = (
+  const handleFinishRegister: FormProps<RegisterType>["onFinish"] = async (
     values
   ) => {
     console.log("Success:", values);
+    try {
+      const { data } = http.post("auth/register", values);
+      console.log("data", data);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -19,7 +32,7 @@ const RegisterForm: FC = () => {
     >
       <Form.Item<RegisterType>
         label="First Name"
-        name="firsName"
+        name="firstName"
         rules={[{ required: true, message: "Please enter your first name!" }]}
       >
         <Input />
@@ -45,6 +58,14 @@ const RegisterForm: FC = () => {
         label="Email"
         name="email"
         rules={[{ required: true, message: "Please enter your email!" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item<RegisterType>
+        label="Phone"
+        name="phone"
+        rules={[{ required: true, message: "Please enter your phone!" }]}
       >
         <Input />
       </Form.Item>
