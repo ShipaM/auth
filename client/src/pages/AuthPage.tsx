@@ -4,6 +4,7 @@ import { options } from "../Forms/forms.constants";
 import type { Segment } from "../Forms/forms.type";
 import LoginForm from "../Forms/Login/LoginForm";
 import RegisterForm from "../Forms/Register/RegisterForm";
+import { useForm } from "antd/es/form/Form";
 
 type AuthPageProps = {
   segment: Segment;
@@ -18,6 +19,7 @@ const AuthPage: FC<AuthPageProps> = ({
   isModalOpen,
   cancelModal,
 }) => {
+  const [form] = useForm();
   return (
     <Modal
       title="Login"
@@ -32,7 +34,11 @@ const AuthPage: FC<AuthPageProps> = ({
         block
         onChange={(value) => onChangeSegment(value as Segment)}
       />
-      {segment === "login" ? <LoginForm /> : <RegisterForm />}
+      {segment === "login" ? (
+        <LoginForm form={form} />
+      ) : (
+        <RegisterForm form={form} />
+      )}
     </Modal>
   );
 };

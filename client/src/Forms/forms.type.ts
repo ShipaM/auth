@@ -6,7 +6,7 @@ export type LoginType = {
 export type RegisterType = {
   username: string;
   password: string;
-  passwordRepeat: string;
+  repeatPassword: string;
   firstName: string;
   lastName: string;
   email: string;
