@@ -67,13 +67,29 @@ export class UserService {
     return newUser;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    return await this.prismaService.user.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findById(id: string) {
+    if (!id) {
+      this.logger.error('ID is undefined');
+      throw new NotFoundException("User doesn't exist with this id");
+    }
+    try {
+      const foundedUser = await this.prismaService.user.findUnique({
+        where: { id },
+      });
+
+      if (!foundedUser) return null;
+
+      return foundedUser;
+    } catch (error) {
+      this.logger.error('Error while finding user by id', error);
+      throw new NotFoundException("User doesn't exist with this id");
+    }
   }
+
   async findByUsername(username: string) {
     try {
       const foundedUser = await this.prismaService.user.findUnique({
@@ -126,11 +142,23 @@ export class UserService {
       });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    return await this.prismaService.user.update({
+      where: { id },
+      data: updateUserDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    return await this.prismaService.user
+      .delete({
+        where: { id },
+      })
+      .then((deletedUser) => {
+        return { message: 'User successfully deleted', deletedUser };
+      })
+      .catch((err) => {
+        throw new Error(`Error while deleting user: ${err.message}`);
+      });
   }
 }

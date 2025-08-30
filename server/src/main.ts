@@ -9,6 +9,7 @@ import { corsOptions } from './config/cors-options.config';
 
 // Импорт ValidationPipe — встроенного пайпа для валидации DTO
 import { Logger, ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 // Устанавливаем порт: либо из переменной окружения, либо по умолчанию 1111
 const PORT = process.env.PORT ?? 1111;
@@ -23,6 +24,8 @@ async function bootstrap() {
 
   // Устанавливаем префикс для всех маршрутов, например: /api/users вместо /users
   app.setGlobalPrefix('api');
+
+  app.use(cookieParser());
 
   // Подключаем глобальный пайп валидации для всех входящих данных (например, DTO)
   app.useGlobalPipes(new ValidationPipe());

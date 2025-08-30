@@ -1,7 +1,7 @@
 import { Form, Input, type FormProps, type FormInstance } from "antd";
 import { memo, type FC } from "react";
 import type { RegisterType } from "../forms.type";
-import { http } from "../../services/http.service";
+import { httpService } from "../../services/http.service";
 import { regexPatterns } from "../../utils/regex/regex";
 import { handleHttpError } from "../../utils/handl-http-error/handle-http-error";
 import SubmitFormButton from "../components/SubmitFormButton";
@@ -16,7 +16,7 @@ const RegisterForm: FC<RegisterFormFormProps> = ({ form }) => {
   ) => {
     console.log("Success:", values);
     try {
-      await http.post("auth/register", values);
+      await httpService.post("auth/register", values);
     } catch (error: unknown) {
       handleHttpError(error, "Registration error");
     }

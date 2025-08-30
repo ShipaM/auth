@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/client';
+import { Public } from '@auth/guards/jwt-auth-guards';
 
 @Controller('user')
 export class UserController {
@@ -21,14 +22,18 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Get('find-all')
+  async findAll() {
+    return await this.userService.findAll();
   }
 
-  @Get('find-one/:id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get('find-by-id/:id')
+  async findById(@Param('id') id: string) {
+    const user: User = await this.userService.findById(id);
+
+    delete user.password;
+
+    return user;
   }
 
   @Get('find-by-username/:username')
@@ -57,12 +62,12 @@ export class UserController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.userService.remove(id);
   }
 }

@@ -2,8 +2,9 @@ import { Form, Input, type FormProps, type FormInstance } from "antd";
 import { memo, type FC } from "react";
 import type { LoginType } from "../forms.type";
 import SubmitFormButton from "../components/SubmitFormButton";
-import { http } from "../../services/http.service";
+import { httpService } from "../../services/http.service";
 import { handleHttpError } from "../../utils/handl-http-error/handle-http-error";
+import { jwtDecode } from "jwt-decode";
 
 type LoginFormProps = {
   form: FormInstance<LoginType>;
@@ -13,9 +14,19 @@ const LoginForm: FC<LoginFormProps> = ({ form }) => {
   const handleFinishLogin: FormProps<LoginType>["onFinish"] = async (
     values
   ) => {
-    console.log("Success:", values);
     try {
-      await http.post("auth/login", values);
+      const { data } = await httpService.post("auth/login", values);
+      const accessToken: string = data.accessToken;
+
+      if (!accessToken) {
+        const message = "Token not found";
+        throw new Error(message);
+      }
+
+      localStorage.setItem("token", accessToken);
+
+      const decodedToken = jwtDecode(accessToken);
+      console.log(decodedToken);
     } catch (error: unknown) {
       handleHttpError(error, "Registration error");
     }
