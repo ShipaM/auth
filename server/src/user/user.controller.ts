@@ -36,9 +36,9 @@ export class UserController {
     return user;
   }
 
-  @Get('find-by-username/:username')
-  async findByUsername(@Param('username') username: string) {
-    const user: User = await this.userService.findByUsername(username);
+  @Get('find-by-user-name/:userName')
+  async findByUserName(@Param('userName') userName: string) {
+    const user: User = await this.userService.findByUserName(userName);
 
     delete user.password;
 

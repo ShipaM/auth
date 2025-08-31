@@ -33,12 +33,12 @@ export class UserService {
       throw new ConflictException(message);
     }
 
-    const existingUserByUsername = await this.findByUsername(
-      createUserDto.username
+    const existingUserByUsername = await this.findByUserName(
+      createUserDto.userName
     );
 
     if (existingUserByUsername) {
-      const message = 'User with this username already exists';
+      const message = 'User with this user name already exists';
       this.logger.error(message);
       throw new ConflictException(message);
     }
@@ -90,18 +90,18 @@ export class UserService {
     }
   }
 
-  async findByUsername(username: string) {
+  async findByUserName(userName: string) {
     try {
       const foundedUser = await this.prismaService.user.findUnique({
-        where: { username },
+        where: { userName },
       });
 
       if (!foundedUser) return null;
 
       return foundedUser;
     } catch (error) {
-      this.logger.error('Error while finding user by username', error);
-      throw new NotFoundException("User doesn't exist with this username");
+      this.logger.error('Error while finding user by user name', error);
+      throw new NotFoundException("User doesn't exist with this user name");
     }
   }
 

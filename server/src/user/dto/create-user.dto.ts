@@ -8,19 +8,19 @@ import {
 
 export class CreateUserDto {
   // firstName — обязательная строка с длиной от 3 до 20 символов
-  @IsString({ message: 'Please enter a valid username' })
+  @IsString({ message: 'Please enter a valid user name' })
   @Length(3, 20, { message: 'Please enter from 3 to 20 characters' })
   firstName: string;
 
   // lastName — обязательная строка с длиной от 3 до 20 символов
-  @IsString({ message: 'Please enter a valid username' })
+  @IsString({ message: 'Please enter a valid user name' })
   @Length(3, 20, { message: 'Please enter from 3 to 20 characters' })
   lastName: string;
 
-  // username — обязательная строка с длиной от 3 до 20 символов
-  @IsString({ message: 'Please enter a valid username' })
+  // userName — обязательная строка с длиной от 3 до 20 символов
+  @IsString({ message: 'Please enter a valid user name' })
   @Length(3, 20, { message: 'Please enter from 3 to 20 characters' })
-  username: string;
+  userName: string;
 
   // email — проверяется, что это валидный email
   @IsEmail({}, { message: 'Please enter a valid email address' })

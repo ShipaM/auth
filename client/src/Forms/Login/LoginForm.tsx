@@ -1,36 +1,46 @@
-import { Form, Input, type FormProps, type FormInstance } from "antd";
+import { Form, Input, type FormInstance, type FormProps } from "antd";
 import { memo, type FC } from "react";
 import type { LoginType } from "../forms.type";
 import SubmitFormButton from "../components/SubmitFormButton";
-import { httpService } from "../../services/http.service";
-import { handleHttpError } from "../../utils/handl-http-error/handle-http-error";
-import { jwtDecode } from "jwt-decode";
+import useAuthStore from "@store/auth-store";
 
 type LoginFormProps = {
   form: FormInstance<LoginType>;
+  onCancel: () => void;
 };
 
-const LoginForm: FC<LoginFormProps> = ({ form }) => {
-  const handleFinishLogin: FormProps<LoginType>["onFinish"] = async (
-    values
-  ) => {
-    try {
-      const { data } = await httpService.post("auth/login", values);
-      const accessToken: string = data.accessToken;
+const LoginForm: FC<LoginFormProps> = ({ form, onCancel }) => {
+  const { login } = useAuthStore();
 
-      if (!accessToken) {
-        const message = "Token not found";
-        throw new Error(message);
+  const handleFinishLogin: FormProps<LoginType>["onFinish"] = (loginData) => {
+    login(loginData).then((accessToken) => {
+      if (accessToken) {
+        onCancel();
+        form.resetFields();
       }
-
-      localStorage.setItem("token", accessToken);
-
-      const decodedToken = jwtDecode(accessToken);
-      console.log(decodedToken);
-    } catch (error: unknown) {
-      handleHttpError(error, "Registration error");
-    }
+    });
   };
+
+  // const handleFinishLogin: FormProps<LoginType>["onFinish"] = async (
+  //   values
+  // ) => {
+  //   try {
+  //     const { data } = await httpService.post("auth/login", values);
+  //     const accessToken: string = data.accessToken;
+
+  //     if (!accessToken) {
+  //       const message = "Token not found";
+  //       throw new Error(message);
+  //     }
+
+  //     localStorage.setItem("token", accessToken);
+
+  //     const decodedToken = jwtDecode(accessToken);
+  //     console.log(decodedToken);
+  //   } catch (error: unknown) {
+  //     handleHttpError(error, "Registration error");
+  //   }
+  // };
 
   return (
     <Form
@@ -42,9 +52,9 @@ const LoginForm: FC<LoginFormProps> = ({ form }) => {
       style={{ margin: "40px 0" }}
     >
       <Form.Item<LoginType>
-        label="Username"
-        name="username"
-        rules={[{ required: true, message: "Please enter your username!" }]}
+        label="UserName"
+        name="userName"
+        rules={[{ required: true, message: "Please enter your user name!" }]}
       >
         <Input autoComplete="username" />
       </Form.Item>

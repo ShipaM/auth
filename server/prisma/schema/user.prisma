@@ -1,0 +1,20 @@
+model User {
+ id        String   @id @default(uuid()) // Уникальный идентификатор пользователя, генерируется с помощью uuid
+ firstName String   @map("first_name") // Имя пользователя, в базе будет поле "first_name"
+ lastName  String   @map("last_name") // Фамилия пользователя, в базе будет поле "last_name"
+ userName  String   @unique // Уникальное имя пользователя (логин)
+ email     String   @unique // Уникальный email пользователя
+ password  String // Пароль пользователя (хранится как строка)
+ phone     String   @unique // Уникальный номер телефона пользователя
+ role      Role[]   @default([USER]) // Роли пользователя, по умолчанию массив с ролью USER
+ createAt  DateTime @default(now()) @map("created_at") // Дата и время создания пользователя, по умолчанию текущий момент, поле "created_at"
+ updateAt  DateTime @updatedAt @map("updated_at") // Дата и время последнего обновления, автоматически обновляется, поле "updated_at"
+ Token     Token[] // Связь с моделью Token — у пользователя может быть много токенов
+
+ @@map("users") // Маппинг модели на таблицу "users" в базе данных
+}
+
+enum Role {
+ ADMIN
+ USER
+}

@@ -40,7 +40,7 @@ export class TokenService {
   generateTokens = async (user: User): Promise<Tokens> => {
     const accessToken = this.jwtService.sign({
       userId: user.id,
-      username: user.username,
+      userName: user.userName,
       email: user.email,
       role: user.role,
     });

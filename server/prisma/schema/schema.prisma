@@ -1,0 +1,14 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js" // Указывает, что нужно сгенерировать Prisma Client — auto-generated client для взаимодействия с базой данных на TypeScript/JavaScript
+}
+
+datasource db {
+  provider = "postgresql" // Определяет, что используется PostgreSQL в качестве СУБД
+  url      = env("DATABASE_URL") // Указывает URL подключения к базе через переменную окружения `DATABASE_URL` для безопасности и гибкости
+}

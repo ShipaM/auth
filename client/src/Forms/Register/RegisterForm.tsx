@@ -1,26 +1,36 @@
 import { Form, Input, type FormProps, type FormInstance } from "antd";
 import { memo, type FC } from "react";
 import type { RegisterType } from "../forms.type";
-import { httpService } from "../../services/http.service";
 import { regexPatterns } from "../../utils/regex/regex";
-import { handleHttpError } from "../../utils/handl-http-error/handle-http-error";
 import SubmitFormButton from "../components/SubmitFormButton";
+import useAuthStore from "@store/auth-store";
 
 type RegisterFormFormProps = {
   form: FormInstance<RegisterType>;
+  onCancel: () => void;
 };
 
-const RegisterForm: FC<RegisterFormFormProps> = ({ form }) => {
+const RegisterForm: FC<RegisterFormFormProps> = ({ form, onCancel }) => {
+  const { register } = useAuthStore();
+
   const handleFinishRegister: FormProps<RegisterType>["onFinish"] = async (
-    values
+    registerData
   ) => {
-    console.log("Success:", values);
-    try {
-      await httpService.post("auth/register", values);
-    } catch (error: unknown) {
-      handleHttpError(error, "Registration error");
-    }
+    register(registerData);
+    onCancel();
+    form.resetFields();
   };
+
+  // const handleFinishRegister: FormProps<RegisterType>["onFinish"] = async (
+  //   values
+  // ) => {
+  //   console.log("Success:", values);
+  //   try {
+  //     await httpService.post("auth/register", values);
+  //   } catch (error: unknown) {
+  //     handleHttpError(error, "Registration error");
+  //   }
+  // };
 
   return (
     <Form
@@ -54,10 +64,10 @@ const RegisterForm: FC<RegisterFormFormProps> = ({ form }) => {
       </Form.Item>
 
       <Form.Item<RegisterType>
-        label="Username"
-        name="username"
+        label="UserName"
+        name="userName"
         rules={[
-          { required: true, message: "Please enter your username!" },
+          { required: true, message: "Please enter your user name!" },
           { min: 3, max: 30, message: "Please enter from 3 to 20 characters" },
         ]}
       >

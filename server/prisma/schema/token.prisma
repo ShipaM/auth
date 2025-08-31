@@ -1,0 +1,10 @@
+model Token {
+  token   String   @unique // Уникальное строковое значение токена
+  expires DateTime // Дата и время истечения срока действия токена
+  userId  String   @map("user_id") // Поле для хранения ID пользователя, в базе будет называться "user_id"
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Связь с моделью User через поле userId,
+  // при удалении пользователя связанные токены удаляются (Cascade)
+
+  @@map("tokens") // Маппинг модели на таблицу "tokens" в базе данных
+}

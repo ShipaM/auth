@@ -1,10 +1,10 @@
 export type LoginType = {
-  username: string;
+  userName: string;
   password: string;
 };
 
 export type RegisterType = {
-  username: string;
+  userName: string;
   password: string;
   repeatPassword: string;
   firstName: string;

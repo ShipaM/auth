@@ -40,12 +40,12 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto): Promise<Tokens> {
-    const { username, password } = loginDto;
+    const { userName, password } = loginDto;
 
     const user: User = await this.userService
-      .findByUsername(username)
+      .findByUserName(userName)
       .catch((err) => {
-        this.logger.error('Error while finding user by username', err);
+        this.logger.error('Error while finding user by user name', err);
 
         return null;
       });
@@ -59,5 +59,23 @@ export class AuthService {
     }
 
     return this.tokenService.generateTokens(user);
+  }
+
+  async deleteRefreshToken(refreshToken: string) {
+    // Проверяем, есть ли токен в базе
+    const token = await this.prismaService.token.findUnique({
+      where: { token: refreshToken },
+    });
+
+    if (!token) {
+      // Если токена нет, просто выходим без ошибки
+      this.logger.warn(`Refresh token not found for deletion: ${refreshToken}`);
+      return;
+    }
+
+    // Если найден — удаляем
+    await this.prismaService.token.delete({
+      where: { token: refreshToken },
+    });
   }
 }

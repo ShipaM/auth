@@ -3,6 +3,7 @@ import "./styles/reset.css";
 import Header from "./Components/UI/Header/Header";
 import Content from "./Components/UI/Content/Content";
 import Footer from "./Components/UI/Footer/Footer";
+import AppLoader from "./hok/AppLoader";
 
 const layoutStyle = {
   width: "100%",
@@ -12,9 +13,11 @@ const layoutStyle = {
 function App() {
   return (
     <Layout style={layoutStyle}>
-      <Header />
-      <Content />
-      <Footer />
+      <AppLoader>
+        <Header />
+        <Content />
+        <Footer />
+      </AppLoader>
     </Layout>
   );
 }

@@ -1,5 +1,5 @@
 import { Modal, Segmented } from "antd";
-import { memo, type FC } from "react";
+import { memo, useCallback, useState, type FC } from "react";
 import { options } from "../Forms/forms.constants";
 import type { Segment } from "../Forms/forms.type";
 import LoginForm from "../Forms/Login/LoginForm";
@@ -7,19 +7,23 @@ import RegisterForm from "../Forms/Register/RegisterForm";
 import { useForm } from "antd/es/form/Form";
 
 type AuthPageProps = {
-  segment: Segment;
-  onChangeSegment: (value: Segment) => void;
   isModalOpen: boolean;
   cancelModal: () => void;
 };
 
-const AuthPage: FC<AuthPageProps> = ({
-  segment,
-  onChangeSegment,
-  isModalOpen,
-  cancelModal,
-}) => {
+const AuthPage: FC<AuthPageProps> = ({ isModalOpen, cancelModal }) => {
   const [form] = useForm();
+
+  const [segment, setSegment] = useState<Segment>("login");
+
+  const handleSegmentChange = useCallback(
+    (value: Segment) => {
+      if (!value) return;
+      setSegment(value);
+    },
+    [setSegment]
+  );
+
   return (
     <Modal
       title="Login"
@@ -32,12 +36,12 @@ const AuthPage: FC<AuthPageProps> = ({
       <Segmented
         options={options}
         block
-        onChange={(value) => onChangeSegment(value as Segment)}
+        onChange={(value) => handleSegmentChange(value as Segment)}
       />
       {segment === "login" ? (
-        <LoginForm form={form} />
+        <LoginForm form={form} onCancel={cancelModal} />
       ) : (
-        <RegisterForm form={form} />
+        <RegisterForm form={form} onCancel={cancelModal} />
       )}
     </Modal>
   );
