@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js" // Указывает, что нужно сгенерировать Prisma Client — auto-generated client для взаимодействия с базой данных на TypeScript/JavaScript
+  provider        = "prisma-client-js" // Указывает, что нужно сгенерировать Prisma Client — auto-generated client для взаимодействия с базой данных на TypeScript/JavaScript
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
